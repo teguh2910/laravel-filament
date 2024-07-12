@@ -28,12 +28,12 @@ class CategoryResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->live(onBlur: true)
-                        ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                            if (($get('slug') ?? '') !== Str::slug($old)) {
-                                return;
-                            }
-                            $set('slug', Str::slug($state));
-                        })
+                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
+                        if (($get('slug') ?? '') !== Str::slug($old)) {
+                            return;
+                        }
+                        $set('slug', Str::slug($state));
+                    })
                     ->required()
                     ->maxLength(255)
                     ->columnSpan(12),
@@ -77,6 +77,7 @@ class CategoryResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
