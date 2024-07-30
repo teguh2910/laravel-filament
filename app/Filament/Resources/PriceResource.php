@@ -2,43 +2,33 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TagResource\Pages;
-use App\Filament\Resources\TagResource\RelationManagers;
-use App\Models\Tag;
+use App\Filament\Resources\PriceResource\Pages;
+use App\Filament\Resources\PriceResource\RelationManagers;
+use App\Models\Price;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Illuminate\Support\Str;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TagResource extends Resource
+class PriceResource extends Resource
 {
-    protected static ?string $model = Tag::class;
+    protected static ?string $model = Price::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(function (Get $get, Set $set, ?string $old, ?string $state) {
-                        if (($get('slug') ?? '') !== Str::slug($old)) {
-                            return;
-                        }
-                        $set('slug', Str::slug($state));
-                    })
+                Forms\Components\TextInput::make('part_number_comp')
                     ->required()
-                    ->maxLength(255)
-                    ->columnSpan(12),
-                Forms\Components\TextInput::make('slug')
-                    ->readonly(),
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('price_ori')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -46,9 +36,9 @@ class TagResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('part_number_comp')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('slug')
+                Tables\Columns\TextColumn::make('price_ori')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -63,7 +53,6 @@ class TagResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -83,9 +72,9 @@ class TagResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTags::route('/'),
-            'create' => Pages\CreateTag::route('/create'),
-            'edit' => Pages\EditTag::route('/{record}/edit'),
+            'index' => Pages\ListPrices::route('/'),
+            'create' => Pages\CreatePrice::route('/create'),
+            'edit' => Pages\EditPrice::route('/{record}/edit'),
         ];
     }
 }

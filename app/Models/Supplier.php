@@ -14,4 +14,8 @@ class Supplier extends Model
         'jenis_supplier',
         'kategori_supplier'
     ];
+    public function apr()
+    {
+        return $this->belongsTo(APR::class);
+    }
 }

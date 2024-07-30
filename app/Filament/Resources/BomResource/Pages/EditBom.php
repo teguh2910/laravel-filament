@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\TagResource\Pages;
+namespace App\Filament\Resources\BomResource\Pages;
 
-use App\Filament\Resources\TagResource;
+use App\Filament\Resources\BomResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditTag extends EditRecord
+class EditBom extends EditRecord
 {
-    protected static string $resource = TagResource::class;
+    protected static string $resource = BomResource::class;
 
     protected function getHeaderActions(): array
     {

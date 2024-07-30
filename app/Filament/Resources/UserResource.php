@@ -4,15 +4,23 @@ namespace App\Filament\Resources;
 
 use App\Mail\BulkEmail;
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\DatePicker;
 use App\Models\User;
-use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Mail;
 use Filament\Notifications\Notification;
 
@@ -27,23 +35,23 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required() // cannot empty
                     ->maxLength(255), // max char 255
 
-                Forms\Components\TextInput::make('email')
+                TextInput::make('email')
                     ->required() // cannot empty
                     ->email() // email validation
                     ->maxLength(255), // max char 255
 
-                Forms\Components\TextInput::make('password')
+                TextInput::make('password')
                     ->required() // cannot empty
                     ->password() //  password text input
                     ->revealable() // hide show password
                     ->maxLength(255), // max char 255
-                Forms\Components\CheckboxList::make('roles')
+                CheckboxList::make('roles')
                     ->relationship('roles', 'name'),
-                Forms\Components\DatePicker::make('email_verified_at'),
+                DatePicker::make('email_verified_at'),
             ]);
     }
 
@@ -51,62 +59,63 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable(),
-                Tables\Columns\TextColumn::make('email')->searchable(),
-                Tables\Columns\BooleanColumn::make('email_verified_at')->label('Verified'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime('M j, Y')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime('M j, Y')
-                    ->sortable(),
+                TextColumn::make('name')->searchable(),
+                TextColumn::make('email')->searchable(),
+                IconColumn::make('email_verified_at')
+                    ->boolean()
+                    ->label('Verified'),
+                // TextColumn::make('created_at')
+                //     ->dateTime('M j, Y')
+                //     ->sortable()
+                //     ->toggleable(isToggledHiddenByDefault: true),
+                // TextColumn::make('updated_at')
+                //     ->dateTime('M j, Y')
+                //     ->toggleable(isToggledHiddenByDefault: true)
+                //     ->sortable(),
             ])
             ->filters([
-                Tables\Filters\Filter::make('verified')
+                Filter::make('verified')
                     ->query(fn (Builder $query): Builder => $query->whereNotNull('email_verified_at')),
-                Tables\Filters\Filter::make('unverified')
+                Filter::make('unverified')
                     ->query(fn (Builder $query): Builder => $query->whereNull('email_verified_at')),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ])
-            ->filters([
-                //
-            ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ViewAction::make(),
+                EditAction::make(),
+                // Action::make('print')
+                //     ->url(fn (User $record): string => url('/'))
+                //     ->openUrlInNewTab(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
-                Tables\Actions\BulkAction::make('sendBulkEmail')
+                BulkAction::make('sendBulkEmail')
                     ->label('Send Bulk Email')
                     ->form([
-                        Forms\Components\TextInput::make('subject')
+                        TextInput::make('subject')
                             ->label('Email Subject')
                             ->required(),
-                        Forms\Components\TextInput::make('periode')
+                        TextInput::make('periode')
                             ->label('Periode')
                             ->required(),
-                        Forms\Components\TextInput::make('usd_rate')
+                        TextInput::make('usd_rate')
                             ->label('USD / IDR')
                             ->numeric()
                             ->required(),
-                        Forms\Components\TextInput::make('jpy_rate')
+                        TextInput::make('jpy_rate')
                             ->label('JPY / IDR')
                             ->numeric()
                             ->required(),
-                        Forms\Components\DatePicker::make('due_date')
+                        DatePicker::make('due_date')
                             ->label('Due Date')
                             ->required(),
-                        Forms\Components\FileUpload::make('attachment')
+                        FileUpload::make('attachment')
                             ->label('Attachment')
                             ->disk('public') // Specify the disk to use
                             ->directory('attachments') // Specify the directory to save files
@@ -148,6 +157,7 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+
         ];
     }
 }

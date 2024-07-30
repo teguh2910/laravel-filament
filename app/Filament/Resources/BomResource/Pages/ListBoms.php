@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\SupplierResource\Pages;
+namespace App\Filament\Resources\BomResource\Pages;
 
-use App\Filament\Resources\SupplierResource;
+use App\Filament\Resources\BomResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-
-class ListSuppliers extends ListRecords
+class ListBoms extends ListRecords
 {
-    protected static string $resource = SupplierResource::class;
+    protected static string $resource = BomResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -17,6 +16,7 @@ class ListSuppliers extends ListRecords
             \EightyNine\ExcelImport\ExcelImportAction::make()
                 ->color("primary"),
             Actions\CreateAction::make(),
+            
         ];
     }
 }

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\SupplierResource\Pages;
+namespace App\Filament\Resources\SalesplanResource\Pages;
 
-use App\Filament\Resources\SupplierResource;
+use App\Filament\Resources\SalesplanResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-
-class ListSuppliers extends ListRecords
+class ListSalesplans extends ListRecords
 {
-    protected static string $resource = SupplierResource::class;
+    protected static string $resource = SalesplanResource::class;
 
     protected function getHeaderActions(): array
     {

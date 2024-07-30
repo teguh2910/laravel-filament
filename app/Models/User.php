@@ -11,7 +11,7 @@ use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable,HasPanelShield,HasRoles;
+    use HasFactory, Notifiable, HasPanelShield, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -46,5 +46,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function getFilamentName()
+    {
+        return $this->name; // Assuming 'name' is a column in your users table
     }
 }

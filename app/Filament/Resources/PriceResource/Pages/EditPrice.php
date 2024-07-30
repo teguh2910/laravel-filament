@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\CategoryResource\Pages;
+namespace App\Filament\Resources\PriceResource\Pages;
 
-use App\Filament\Resources\CategoryResource;
+use App\Filament\Resources\PriceResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
-class EditCategory extends EditRecord
+class EditPrice extends EditRecord
 {
-    protected static string $resource = CategoryResource::class;
+    protected static string $resource = PriceResource::class;
 
     protected function getHeaderActions(): array
     {

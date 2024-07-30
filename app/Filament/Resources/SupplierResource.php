@@ -3,15 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\SupplierResource\Pages;
-use App\Filament\Resources\SupplierResource\RelationManagers;
 use App\Models\Supplier;
-use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 
 class SupplierResource extends Resource
 {
@@ -23,16 +25,16 @@ class SupplierResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_supplier')
+                TextInput::make('nama_supplier')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('periode_supplier')
+                TextInput::make('periode_supplier')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('jenis_supplier')
+                TextInput::make('jenis_supplier')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('kategori_supplier')
+                TextInput::make('kategori_supplier')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -42,33 +44,38 @@ class SupplierResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('nama_supplier')
+                TextColumn::make('nama_supplier')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('periode_supplier')
+                TextColumn::make('periode_supplier')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('jenis_supplier')
+                TextColumn::make('jenis_supplier')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('kategori_supplier')
+                TextColumn::make('kategori_supplier')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ViewAction::make(),
+                EditAction::make(),
+
+            ])
+            ->headerActions([
+                ExportAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
